@@ -67,6 +67,12 @@ public abstract class Task<Param, Result> {
     }
 
     public Task() {
+        progress.observe(new Observer<Progress>() {
+            @Override
+            public void onChanged(Progress progress) {
+                onProgressChanged(progress);
+            }
+        });
     }
 
     public Task<Param, Result> observerOn(Executor executor) {
@@ -258,7 +264,7 @@ public abstract class Task<Param, Result> {
     }
 
     public void publishProgressChanged(Progress progress) {
-        dispatchExecutor.execute(new PostRunnable(REQUEST_SCHEDULE, new Progress(progress)));
+        this.progress.setValue(progress);
     }
 
     private class PostRunnable implements Runnable {
