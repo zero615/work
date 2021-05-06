@@ -36,12 +36,12 @@ public class WorkManager {
 
         @Override
         protected Task onCreateValue(Class key) {
-            return creator.creator(key).observerOn(AppExecutor.main()).run(AppExecutor.async());
+            return creator.creator(key).observerOn(AppExecutor.main());
         }
 
         @Override
         protected void onBindValue(Task value, Object extra) {
-            if (value.isExecuted()) {
+            if (!value.isExecuted()) {
                 value.input(extra).run(AppExecutor.async());
             }
         }
@@ -52,6 +52,6 @@ public class WorkManager {
     private final Internal internal = new Internal();
 
     public <T extends Task> T enqueue(Class<T> cls, Object extra) {
-        return (T) internal.opt(cls);
+        return (T) internal.opt(cls,extra);
     }
 }

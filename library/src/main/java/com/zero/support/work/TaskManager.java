@@ -60,8 +60,11 @@ public class TaskManager<K, T extends Task> extends ObjectManager<K, T> {
     @Override
     @SuppressWarnings("ALL")
     protected T onCreateValue(K key) {
-        return (T) super.onCreateValue(key).input(key).addOnTaskEventListener(listener).observerOn(dispatchExecutor).run(executor);
+        return (T) super.onCreateValue(key).input(key).addOnTaskEventListener(listener).observerOn(dispatchExecutor);
     }
 
-
+    @Override
+    protected void onBindValue(T value, Object extra) {
+        value.run(executor);
+    }
 }
