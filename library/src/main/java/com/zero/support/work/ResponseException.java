@@ -1,6 +1,6 @@
 package com.zero.support.work;
 
-public class ResponseException extends Exception{
+public class ResponseException extends Exception {
     private final int code;
     private final String message;
 
@@ -9,10 +9,19 @@ public class ResponseException extends Exception{
         this.message = message;
     }
 
-    public int code(){
+    public int code() {
         return code;
     }
-    public String message(){
+
+    public String message() {
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseException{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                '}';
     }
 }
