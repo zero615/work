@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import com.zero.support.work.util.ObservableLiveData;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -76,7 +77,11 @@ public class Observable<T> {
      * 该方法内部使用的是弱引用，所以不支持链式调用
      */
     public LiveData<T> asWeakLive() {
-        return new ObservableLiveData<>(this);
+        return new ObservableLiveData<>(this,true);
+    }
+
+    public LiveData<T> asLive() {
+        return new ObservableLiveData<>(this,false);
     }
 
     @SuppressWarnings("ALL")
@@ -100,6 +105,7 @@ public class Observable<T> {
 
     public void reset() {
         mValue = NOT_SET;
+        mVersion = START_VERSION;
     }
 
     public final synchronized void observe(Observer<T> observer) {

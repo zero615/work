@@ -16,9 +16,29 @@ public class ObservableLiveData<T> extends MutableLiveData<T> {
             postValue(t);
         }
     };
+    private final boolean weak;
 
-    public ObservableLiveData(Observable<T> observable) {
+    public ObservableLiveData(Observable<T> observable, boolean weak) {
         this.observable = observable;
-        this.observable.observe(observer,true);
+        this.weak = weak;
+        if (weak) {
+            this.observable.observe(observer, true);
+        }
+    }
+
+    @Override
+    protected void onInactive() {
+        super.onInactive();
+        if (!weak) {
+            observable.remove(observer);
+        }
+    }
+
+    @Override
+    protected void onActive() {
+        super.onActive();
+        if (!weak) {
+            observable.observe(observer, false);
+        }
     }
 }

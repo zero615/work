@@ -3,7 +3,6 @@ package com.zero.support.work;
 
 public class WorkManager {
 
-
     public static WorkManager getDefault() {
         return manager;
     }
@@ -52,6 +51,6 @@ public class WorkManager {
     private final Internal internal = new Internal();
 
     public <T extends Task> T enqueue(Class<T> cls, Object extra) {
-        return (T) internal.opt(cls,extra);
+        return (T) internal.opt(cls, extra);
     }
 }

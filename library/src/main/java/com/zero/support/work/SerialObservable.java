@@ -19,13 +19,21 @@ public class SerialObservable<T> extends Observable<T> {
     }
 
     @Override
-    public void performDispatch(Observer<T> observer, Object value, int version) {
-        mExecutor.execute(new PostRunnable(observer, value, version,false,false));
+    protected void performDispatch(Observer<T> observer, Object value, int version) {
+        mExecutor.execute(new PostRunnable(observer, value, version, false, false));
     }
 
     @Override
     protected synchronized void performObserve(Observer<T> observer, boolean weak) {
-        mExecutor.execute(new PostRunnable(observer,null,0,weak,true));
+        mExecutor.execute(new PostRunnable(observer, null, 0, weak, true));
+    }
+
+    protected void onPostPerformObserver(Observer<T> observer, boolean weak) {
+        dispatchObserver(observer, weak);
+    }
+
+    protected void onPostPerformDispatch(Observer<T> observer, Object value, int version) {
+        dispatchValue(observer, value, version);
     }
 
     private class PostRunnable implements Runnable {
@@ -44,13 +52,12 @@ public class SerialObservable<T> extends Observable<T> {
         }
 
 
-
         @Override
         public void run() {
-            if (mObserve){
-                dispatchObserver(mObserver,mWeak);
-            }else {
-                dispatchValue(mObserver, mPostValue, mVersion);
+            if (mObserve) {
+                onPostPerformObserver(mObserver, mWeak);
+            } else {
+                onPostPerformDispatch(mObserver, mPostValue, mVersion);
             }
         }
     }
