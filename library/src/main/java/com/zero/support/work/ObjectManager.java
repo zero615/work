@@ -50,6 +50,7 @@ public class ObjectManager<K, V> {
                     objects.put(key, value);
                 }
             }
+            onBindValue(value,null);
             return value;
         }
     }
