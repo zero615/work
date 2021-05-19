@@ -92,7 +92,10 @@ public abstract class Task<Param, Result> {
 
 
     public boolean cancel(boolean interrupt) {
-        if (!mCancelled.get()) {
+        if (mCancelled.get()) {
+            if (interrupt){
+                runnable.cancel();
+            }
             return false;
         }
         mCancelled.set(true);

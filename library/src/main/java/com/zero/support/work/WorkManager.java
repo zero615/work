@@ -1,6 +1,8 @@
 package com.zero.support.work;
 
 
+import java.util.concurrent.Executor;
+
 public class WorkManager {
 
     public static WorkManager getDefault() {
@@ -47,6 +49,17 @@ public class WorkManager {
     }
 
     private final static WorkManager manager = new WorkManager();
+    private Executor executor;
+    private Executor dispatchExecutor;
+
+    public WorkManager(Executor executor, Executor dispatchExecutor) {
+        this.executor = executor;
+        this.dispatchExecutor = dispatchExecutor;
+    }
+
+    public WorkManager() {
+        this(AppExecutor.async(),AppExecutor.current());
+    }
 
     private final Internal internal = new Internal();
 
