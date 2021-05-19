@@ -22,6 +22,15 @@ public class WorkManager {
 
     @SuppressWarnings("ALL")
     private class Internal extends TaskManager<Class, Task> {
+        private Task.OnTaskEventListener listener = new Task.OnTaskEventListener() {
+            @Override
+            public void onStatusChanged(Task task, int status) {
+                if (task.isFinished()) {
+                    remove(task.getClass());
+                }
+            }
+        };
+
         public Internal() {
             super(new Creator<Class, Task>() {
                 @Override
@@ -36,8 +45,8 @@ public class WorkManager {
         }
 
         @Override
-        protected Task onCreateValue(Class key) {
-            return creator.creator(key).observerOn(dispatchExecutor).addOnTaskEventListener(onTaskEventListener);
+        protected Task onCreateValue(final Class key) {
+            return creator.creator(key).observerOn(dispatchExecutor).addOnTaskEventListener(listener);
         }
 
         @Override

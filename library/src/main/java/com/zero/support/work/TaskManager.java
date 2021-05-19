@@ -7,7 +7,7 @@ public class TaskManager<K, T extends Task> extends ObjectManager<K, T>  {
     private final Executor dispatchExecutor;
 
     @SuppressWarnings("ALL")
-    protected Task.OnTaskEventListener onTaskEventListener = new Task.OnTaskEventListener<K, Object>() {
+    private Task.OnTaskEventListener listener = new Task.OnTaskEventListener<K, Object>() {
         @Override
         public void onStatusChanged(Task<K, Object> task, int status) {
             if (task.isFinished()) {
@@ -60,7 +60,7 @@ public class TaskManager<K, T extends Task> extends ObjectManager<K, T>  {
     @Override
     @SuppressWarnings("ALL")
     protected T onCreateValue(K key) {
-        return (T) super.onCreateValue(key).input(key).addOnTaskEventListener(onTaskEventListener).observerOn(dispatchExecutor);
+        return (T) super.onCreateValue(key).input(key).addOnTaskEventListener(listener).observerOn(dispatchExecutor);
     }
 
     @Override
