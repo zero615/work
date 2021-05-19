@@ -37,13 +37,13 @@ public class WorkManager {
 
         @Override
         protected Task onCreateValue(Class key) {
-            return creator.creator(key).observerOn(AppExecutor.main());
+            return creator.creator(key).observerOn(dispatchExecutor).addOnTaskEventListener(onTaskEventListener);
         }
 
         @Override
         protected void onBindValue(Task value, Object extra) {
             if (!value.isExecuted()) {
-                value.input(extra).run(AppExecutor.async());
+                value.input(extra).run(executor);
             }
         }
     }
@@ -58,7 +58,7 @@ public class WorkManager {
     }
 
     public WorkManager() {
-        this(AppExecutor.async(),AppExecutor.current());
+        this(AppExecutor.async(), AppExecutor.main());
     }
 
     private final Internal internal = new Internal();

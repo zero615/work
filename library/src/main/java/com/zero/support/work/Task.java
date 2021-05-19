@@ -231,6 +231,9 @@ public abstract class Task<Param, Result> {
 
     @SuppressWarnings("ALL")
     public void dispatchChanged(int status, Object result) {
+        if (status!=REQUEST_SCHEDULE){
+            this.status = status;
+        }
         if (status == STATUS_COMPLETED) {
             this.result.setValue((Result) result);
             mVariable.open();
@@ -245,7 +248,6 @@ public abstract class Task<Param, Result> {
             onError(throwable);
         }
         if (status != REQUEST_SCHEDULE) {
-            this.status = status;
             for (OnTaskEventListener listener : onTaskEventListeners) {
                 listener.onStatusChanged(this, status);
             }
