@@ -77,8 +77,6 @@ public abstract class Task<Param, Result> {
 
     public Task<Param, Result> observerOn(Executor executor) {
         dispatchExecutor = executor;
-        result.observeOn(dispatchExecutor);
-        progress.observeOn(dispatchExecutor);
         return this;
     }
 
